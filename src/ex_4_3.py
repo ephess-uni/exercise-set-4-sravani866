@@ -22,8 +22,9 @@ def time_between_shutdowns(logfile):
     shutdown_events = get_shutdown_events(logfile)
 
     if len(shutdown_events) < 2:
-        print("Error: Insufficient shutdown events to calculate time difference.")
-        return None
+        raise ValueError("Insufficient shutdown events to calculate time difference.")
+    
+        
 
     first_shutdown_time = logstamp_to_datetime(shutdown_events[0].split(' ',2)[1])
     last_shutdown_time = logstamp_to_datetime(shutdown_events[-2].split(' ',2)[1])
@@ -34,4 +35,8 @@ def time_between_shutdowns(logfile):
 
 # >>>> The code below will call your function and print the results
 if __name__ == "__main__":
-    print(f'{time_between_shutdowns(FILENAME)=}')
+    try:
+        result = time_between_shutdowns(FILENAME)
+        print(f'Time between first and last shutdowns: {result}')
+    except Exception as e:
+        print(f'Error: {e}')
