@@ -25,12 +25,14 @@ def time_between_shutdowns(logfile):
         raise ValueError("Insufficient shutdown events to calculate time difference.")
     
         
+    try:
+        first_shutdown_time = logstamp_to_datetime(shutdown_events[0].split(' ', 2)[1])
+        last_shutdown_time = logstamp_to_datetime(shutdown_events[-1].split(' ', 2)[1])
 
-    first_shutdown_time = logstamp_to_datetime(shutdown_events[0].split(' ',2)[1])
-    last_shutdown_time = logstamp_to_datetime(shutdown_events[-2].split(' ',2)[1])
-
-    time_difference = last_shutdown_time - first_shutdown_time
-    return time_difference
+        time_difference = last_shutdown_time - first_shutdown_time
+        return time_difference
+    except ValueError as e:
+        raise ValueError(f"Error parsing date stamps: {e}")
 
 
 # >>>> The code below will call your function and print the results
